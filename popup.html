@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Video Speed Control</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <div class="icon">▶</div>
+        <div>
+            <div class="title">Video Speed</div>
+            <div class="subtitle">Universal controller</div>
+        </div>
+    </div>
+
+    <div class="speed-display">
+        <span id="speedValue">2.00×</span>
+    </div>
+
+    <div class="slider-row">
+        <button id="minus" class="round">−</button>
+        <input id="slider" type="range" min="0.25" max="5" step="0.25" value="1">
+        <button id="plus" class="round">+</button>
+    </div>
+
+    <div class="presets" id="presets">
+        <button data-speed="0.5">0.5×</button>
+        <button data-speed="1">1×</button>
+        <button data-speed="1.25">1.25×</button>
+        <button data-speed="1.5">1.5×</button>
+        <button data-speed="1.75">1.75×</button>
+        <button data-speed="2">2×</button>
+        <button data-speed="2.5">2.5×</button>
+        <button data-speed="3">3×</button>
+        <button data-speed="4">4×</button>
+        <button data-speed="5">5×</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="status">
+        <span class="dot"></span>
+        <span id="statusText">Ready</span>
+    </div>
+
+    <div class="hint">
+        <span>[</span> slower
+        <span>]</span> faster
+        <span>\</span> reset
+    </div>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
