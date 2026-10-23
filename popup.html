@@ -1,55 +1,223 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Video Speed Control</title>
-<link rel="stylesheet" href="popup.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>VideoTune</title>
+    <link rel="stylesheet" href="popup.css">
 </head>
 <body>
 <div class="app">
-    <div class="header">
-        <div class="icon">▶</div>
-        <div>
-            <div class="title">Video Speed</div>
-            <div class="subtitle">Universal controller</div>
+    <header class="header">
+        <div class="brand-cluster">
+            <div class="brand-mark" aria-hidden="true"><img src="icon128.png" alt=""></div>
+            <div class="brand-copy">
+                <div class="brand"><span>Video</span><strong>Tune</strong></div>
+                <div class="tagline">Playback · amplified · tuned</div>
+                <div class="site" id="site">Current site</div>
+            </div>
         </div>
+        <div class="player-status" title="Player status">
+            <span class="player-dot" id="playerDot"></span>
+            <span class="status-label">READY</span>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="control">Control</button>
+        <button class="tab" data-tab="info">Info</button>
+        <button class="tab" data-tab="sites">Sites</button>
     </div>
 
-    <div class="speed-display">
-        <span id="speedValue">2.00×</span>
-    </div>
+    <section id="controlTab" class="tab-content active">
+        <div class="scope-card">
+            <div class="scope-head">
+                <div>
+                    <b id="scopeTitle">Site Default</b>
+                    <small id="scopeDescription">Saved for this website and reused in its tabs.</small>
+                </div>
+                <div class="scope-actions">
+                    <button id="siteMode" class="scope-btn active">Site</button>
+                    <button id="tabMode" class="scope-btn">This Tab</button>
+                </div>
+            </div>
+            <div class="scope-note" id="scopeNote">Changes here become the permanent default for this domain.</div>
+            <button id="resetTab" class="reset-tab" style="display:none">Remove This Tab Override</button>
+        </div>
 
-    <div class="slider-row">
-        <button id="minus" class="round">−</button>
-        <input id="slider" type="range" min="0.25" max="5" step="0.25" value="1">
-        <button id="plus" class="round">+</button>
-    </div>
+        <div class="toggle">
+            <div>
+                <b>Speed Control</b>
+                <small id="state">Off</small>
+            </div>
+            <label class="switch">
+                <input id="enabled" type="checkbox">
+                <span></span>
+            </label>
+        </div>
 
-    <div class="presets" id="presets">
-        <button data-speed="0.5">0.5×</button>
-        <button data-speed="1">1×</button>
-        <button data-speed="1.25">1.25×</button>
-        <button data-speed="1.5">1.5×</button>
-        <button data-speed="1.75">1.75×</button>
-        <button data-speed="2">2×</button>
-        <button data-speed="2.5">2.5×</button>
-        <button data-speed="3">3×</button>
-        <button data-speed="4">4×</button>
-        <button data-speed="5">5×</button>
-    </div>
+        <div class="speed-display">
+            <span class="speed-kicker">CURRENT PLAYBACK</span>
+            <div class="speed" id="value">1.00×</div>
+            <span class="speed-caption">precise control · 0.25× — 5×</span>
+        </div>
 
-    <div class="divider"></div>
+        <div class="custom">
+            <input id="custom" type="number" min=".25" max="5" step=".01" placeholder="Custom speed, e.g. 1.37">
+            <button id="applyCustom">Apply</button>
+        </div>
 
-    <div class="status">
-        <span class="dot"></span>
-        <span id="statusText">Ready</span>
-    </div>
+        <div class="row">
+            <button id="minus">−</button>
+            <input id="slider" type="range" min=".25" max="5" step=".01" value="1">
+            <button id="plus">+</button>
+        </div>
 
-    <div class="hint">
-        <span>[</span> slower
-        <span>]</span> faster
-        <span>\</span> reset
-    </div>
+        <div class="presets">
+            <button data-speed=".5">0.5×</button>
+            <button data-speed="1">1×</button>
+            <button data-speed="1.25">1.25×</button>
+            <button data-speed="1.5">1.5×</button>
+            <button data-speed="1.75">1.75×</button>
+            <button data-speed="2">2×</button>
+            <button data-speed="2.5">2.5×</button>
+            <button data-speed="3">3×</button>
+            <button data-speed="4">4×</button>
+            <button data-speed="5">5×</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Playback</div>
+            <div class="skip">
+                <button data-skip="-30">−30s</button>
+                <button data-skip="-10">−10s</button>
+                <button data-skip="10">+10s</button>
+                <button data-skip="30">+30s</button>
+            </div>
+        </div>
+
+        <div class="section audio-section">
+            <div class="section-heading-row"><div class="section-title">Audio Lab <span class="section-muted">local playback</span></div><span class="lab-badge">WEB AUDIO</span></div>
+
+            <div class="toggle compact-toggle">
+                <div>
+                    <b>Volume Booster</b>
+                    <small>Master switch • boost + EQ</small>
+                </div>
+                <label class="switch small">
+                    <input id="volumeBoostEnabled" type="checkbox">
+                    <span></span>
+                </label>
+            </div>
+
+            <div class="range-row">
+                <input id="volumeBoost" type="range" min="100" max="600" step="1" value="100">
+                <span id="volumeBoostValue">100%</span>
+            </div>
+
+            <div class="audio-two-col">
+                <div class="mini-card audio-info-card">
+                    <div>
+                        <b>EQ</b>
+                        <small>Preset + 10-band + tone</small>
+                    </div>
+                    <span class="linked-badge">Linked to Boost</span>
+                </div>
+                <div class="toggle mini-card">
+                    <div>
+                        <b>Compressor</b>
+                        <small>Soft limiting</small>
+                    </div>
+                    <label class="switch small">
+                        <input id="compressorEnabled" type="checkbox">
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="tone-grid">
+                <label class="tone-card">
+                    <span>Bass Boost</span>
+                    <b id="bassBoostValue">0 dB</b>
+                    <input id="bassBoost" type="range" min="0" max="20" step="1" value="0">
+                </label>
+                <label class="tone-card">
+                    <span>Treble Boost</span>
+                    <b id="trebleBoostValue">0 dB</b>
+                    <input id="trebleBoost" type="range" min="0" max="20" step="1" value="0">
+                </label>
+            </div>
+
+            <details class="eq-details" id="eqDetails">
+                <summary>10-Band Equalizer</summary>
+                <div class="eq-toolbar">
+                    <select id="eqPreset" aria-label="EQ preset">
+                        <option value="normal">Normal (EQ Off)</option>
+                        <option value="flat">Flat</option>
+                        <option value="bass">Bass Boost</option>
+                        <option value="treble">Treble Boost</option>
+                        <option value="vocal">Vocal</option>
+                        <option value="rock">Rock</option>
+                        <option value="pop">Pop</option>
+                        <option value="movie">Movie</option>
+                        <option value="classical">Classical</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <button id="resetEq" class="small-action">Reset</button>
+                </div>
+                <div id="eqBands" class="eq-bands"></div>
+            </details>
+
+            <div class="audio-note">Volume Booster is the master audio switch. Normal bypasses EQ; Flat keeps the EQ stages at 0 dB. Boost above 100% is processed locally with Web Audio.</div>
+        </div>
+
+        <div class="buttons action-grid">
+            <button id="pip" class="action">Picture-in-Picture</button>
+            <button id="float" class="action">Floating Controls</button>
+        </div>
+
+        <div class="status-line">
+            <span class="dot" id="dot"></span>
+            <span id="status">New site — Off by default</span>
+        </div>
+    </section>
+
+    <section id="infoTab" class="tab-content">
+        <div class="info-banner">
+            <span class="info-dot"></span>
+            <span id="infoBannerText">Checking for a video player…</span>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card"><span>Resolution</span><b id="iResolution">—</b></div>
+            <div class="info-card"><span>Position</span><b id="iTime">—</b></div>
+            <div class="info-card"><span>Speed</span><b id="iSpeed">—</b></div>
+            <div class="info-card"><span>Player Volume</span><b id="iVolume">—</b></div>
+            <div class="info-card"><span>Volume Boost</span><b id="iBoost">—</b></div>
+            <div class="info-card"><span>EQ</span><b id="iEq">—</b></div>
+            <div class="info-card"><span>Players</span><b id="iPlayers">—</b></div>
+            <div class="info-card"><span>PiP</span><b id="iPip">—</b></div>
+            <div class="info-card"><span>Buffer ahead</span><b id="iBuffer">—</b></div>
+            <div class="info-card"><span>Dropped frames</span><b id="iDropped">—</b></div>
+            <div class="info-card wide"><span>Playback</span><b id="iPlayback">—</b></div>
+        </div>
+        <div class="debug-note" id="debugNote">Diagnostics update while this panel is open.</div>
+    </section>
+
+    <section id="sitesTab" class="tab-content">
+        <div class="sites-head">
+            <div>
+                <b>Saved Site Profiles</b>
+                <small>Permanent defaults for each website</small>
+            </div>
+            <button id="refreshSites">Refresh</button>
+        </div>
+        <div id="sitesList" class="sites-list"></div>
+        <div id="sitesEmpty" class="empty">No saved site profiles yet.</div>
+    </section>
+
+    <div class="hint"><span class="hint-glow"></span><kbd>[</kbd>/<kbd>]</kbd> speed · <kbd>Shift+←/→</kbd> skip · <kbd>Alt+P</kbd> PiP</div>
 </div>
 <script src="popup.js"></script>
 </body>

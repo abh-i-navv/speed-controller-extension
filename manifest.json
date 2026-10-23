@@ -1,29 +1,28 @@
 {
   "manifest_version": 3,
-  "name": "Universal Video Speed Control",
-  "version": "2.0.0",
-  "description": "Control HTML5 video playback speed across websites.",
+  "name": "VideoTune",
+  "version": "16.9",
+  "description": "Speed, 600% volume boost, EQ, bass/treble and a floating video controller.",
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "webNavigation",
+    "scripting"
   ],
   "action": {
-    "default_title": "Video Speed Control",
+    "default_title": "VideoTune",
     "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_idle",
-      "all_frames": true
-    }
+  "host_permissions": [
+    "<all_urls>"
   ]
 }
